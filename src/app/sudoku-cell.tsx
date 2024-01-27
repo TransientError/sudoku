@@ -27,10 +27,20 @@ export default function SudokuCell({ x, y }: CellProps) {
     });
   }
 
+  function handleUnset() {
+    if (value.options.length > 0) {
+      updateState((d) => void (d.grid[y][x].mode = CellMode.Options));
+    }
+  }
+
   function displayCell(mode: CellMode) {
     switch (mode) {
       case CellMode.Set: {
-        return <p className="font-bold">{value.v === 0 ? "" : value.v}</p>;
+        return (
+          <p className="font-bold" onContextMenu={handleUnset}>
+            {value.v === 0 ? "" : value.v}
+          </p>
+        );
       }
       case CellMode.Input: {
         return (

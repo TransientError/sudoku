@@ -45,7 +45,6 @@ export default function OptionCell({
       key={ox}
       onClick={handleOnClick}
       onContextMenu={handleSetCell}
-      onDoubleClick={handleSetCell}
     >
       {display}
     </div>

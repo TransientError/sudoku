@@ -80,6 +80,12 @@ export function updateOptions(s: State, options: number[][][]) {
 export function removeOption(s: State, sx: number, sy: number, v: number) {
   const options = s.grid[sy][sx].options;
   options.splice(options.indexOf(v), 1);
+
+  for (const row of s.grid) {
+    for (const cs of row) {
+      cs.highlight = Highlight.None;
+    }
+  }
 }
 
 export function addOption(s: State, sx: number, sy: number, v: number) {
@@ -119,6 +125,10 @@ function remove<T>(arr: T[], v: T): void {
   if (arr.includes(v)) {
     arr.splice(arr.indexOf(v), 1);
   }
+}
+
+export function setMode(s: State, x: number, y: number, mode: CellMode) {
+  s.grid[y][x].mode = mode;
 }
 
 export function mapToBox(x: number, y: number): number {
@@ -278,8 +288,18 @@ export const INDEX_TO_BOX = new Map<number, Coordinate[]>([
   ],
 ]);
 
-export function updateMatchHighlights(s: State, coordss: Coordinate[], match: MatchType) {
+export function updateMatchHighlights(
+  s: State,
+  coordss: Coordinate[],
+  match?: MatchType,
+) {
   assert(coordss.length > 0);
+
+  for (const row of s.grid) {
+    for (const cell of row) {
+      cell.highlight = Highlight.None;
+    }
+  }
 
   const [x, y] = coordss[0];
   switch (match) {
@@ -302,9 +322,9 @@ export function updateMatchHighlights(s: State, coordss: Coordinate[], match: Ma
       break;
   }
   for (const coords of coordss) {
-      const [x1, y1] = coords;
-      s.grid[y1][x1].highlight = Highlight.Critical;
-    }
+    const [x1, y1] = coords;
+    s.grid[y1][x1].highlight = Highlight.Critical;
+  }
 }
 
 export function highlightPointers(s: State, n: number) {
