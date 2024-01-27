@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sudoku--row {
+  @apply table-row;
+  height: 11.111111%
+}
+
+/* .sudoku--cell[data-y="2"] { */
+/*   border-bottom: 1px solid black; */
+/* } */
+
+/* .sudoku--cell[data-y="5"] { */
+/*   border-bottom: 1px solid black; */
+/* } */
+
+.sudoku--cell:nth-child(3) {
+  border-right: 1px solid black;
+}
+
+.sudoku--cell:nth-child(6) {
+  border-right: 1px solid black;
+}
+
+.button {
+  @apply rounded-md bg-blue-400 px-1;
+}
+
+.sudoku--cell {
+  width: 11.111111%
+}
