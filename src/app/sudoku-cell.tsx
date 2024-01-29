@@ -1,17 +1,16 @@
-import { FormEvent, useContext } from "react";
-import { StateContext } from "./app";
-import {
-  CellMode,
-  CellState,
-  Coordinate,
-  Highlight,
-  updateCoordinate,
-} from "./state";
+import { FormEvent } from "react";
 import OptionTable from "./option-table";
+import { useStateStore } from "./zustand";
+import { CellMode, CellState, Coordinate, default as GridUtils, Highlight } from "./grid";
+import equal from "fast-deep-equal/react";
 
-export default function SudokuCell({ x, y }: CellProps) {
-  const { state, updateState } = useContext(StateContext)!;
-  const value = state.grid[y][x];
+export default function SudokuCell({ x, y }: { x: number; y: number }) {
+  const grid = useStateStore((s) => s.grid, equal);
+  const invalid = useStateStore((s) => s.invalid, equal);
+  const value = grid[y][x];
+
+  const updateCoordinate = useStateStore(s => s.updateCoordinate);
+  const setMode = useStateStore(s => s.setMode);
 
   function handleOnChange(e: FormEvent<HTMLInputElement>) {
     const element = e.target as HTMLInputElement;
@@ -22,14 +21,14 @@ export default function SudokuCell({ x, y }: CellProps) {
       return;
     }
 
-    updateState((s) => {
-      updateCoordinate(s, x, y, parsedInput);
-    });
+    const invalid = GridUtils.checkGrid(grid);
+
+    updateCoordinate(x, y, parsedInput, invalid);
   }
 
   function handleUnset() {
     if (value.options.length > 0) {
-      updateState((d) => void (d.grid[y][x].mode = CellMode.Options));
+      setMode(x, y, CellMode.Options);
     }
   }
 
@@ -46,9 +45,7 @@ export default function SudokuCell({ x, y }: CellProps) {
         return (
           <div
             className={
-              displayInvalid(state.invalid, value)
-                ? "border border-red-500"
-                : ""
+              displayInvalid(invalid, value) ? "border border-red-500" : ""
             }
           >
             <input
@@ -119,7 +116,3 @@ function validateCellInput(s: string): [boolean, number] {
   return [parsed != null && parsed > 0 && parsed < 10, parsed];
 }
 
-type CellProps = {
-  x: number;
-  y: number;
-};
