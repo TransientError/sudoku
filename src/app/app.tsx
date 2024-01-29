@@ -168,7 +168,7 @@ export default function App() {
         {Array.from({ length: 9 }, (_, y) => (
           <div key={y} className="sudoku--row">
             {Array.from({ length: 9 }, (_, x) => (
-              <SudokuCell x={x} y={y} />
+              <SudokuCell key={x} x={x} y={y} />
             ))}
           </div>
         ))}
@@ -178,7 +178,7 @@ export default function App() {
           Calculate options
         </button>
         {Array.from({ length: 9 }, (_, i) => (
-          <button
+          <button key={i}
             className="button col-span-1"
             onClick={handleHighlightPointers(i + 1)}
           >
@@ -186,7 +186,7 @@ export default function App() {
           </button>
         ))}
         {Array.from({ length: 4 }, (_, i) => (
-          <button
+          <button key={i}
             className="button col-span-3"
             onClick={
               i + 1 === 1
@@ -198,7 +198,7 @@ export default function App() {
           </button>
         ))}
         {Array.from({ length: 3 }, (_, i) => (
-          <button
+          <button key={i}
             className="button col-span-3"
             onClick={handleFindNakedGroups(i + 2)}
           >

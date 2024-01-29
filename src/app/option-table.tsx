@@ -9,7 +9,7 @@ export default function OptionTable({
       {Array.from({ length: 3 }, (_, oy) => (
         <div className="table-row h-1/3" key={oy}>
           {Array.from({ length: 3 }, (_, ox) => (
-            <OptionCell sx={sx} sy={sy} ox={ox} oy={oy} />
+            <OptionCell key={ox} sx={sx} sy={sy} ox={ox} oy={oy} />
           ))}
         </div>
       ))}
